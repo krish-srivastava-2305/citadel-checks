@@ -1,6 +1,12 @@
 import userData from "../sample/user.data.js";
 import generateSemanticRepresentation from "../util/semanticGenerator.js";
 
+
+/*
+    Purpose:
+        Populate the Pinecone index with user data.
+*/
+
 async function upsertAll(pc, indexName, indexHost, namespace) {
     try {
         const index = pc.index(indexName, indexHost);
@@ -10,7 +16,7 @@ async function upsertAll(pc, indexName, indexHost, namespace) {
             const chunkText = generateSemanticRepresentation([user]).join("");
 
             return {
-                _id: `${user.id}`, // Ensure ID is a string
+                _id: String(user.id), // Ensure ID is a string
                 chunk_text: chunkText,
                 category: user.category || "general",     // Optional metadata
                 quarter: user.quarter || "Q1"             // Optional metadata

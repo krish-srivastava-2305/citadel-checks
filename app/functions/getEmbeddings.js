@@ -1,3 +1,6 @@
+
+/* Generate embeddings for the given text chunk using Pinecone */
+
 const getEmbeddings = async (chunkText, pc) => {
     try {
         const model = 'llama-text-embed-v2';

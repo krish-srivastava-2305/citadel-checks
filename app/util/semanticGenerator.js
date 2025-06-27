@@ -1,3 +1,11 @@
+/*
+  Purpose:
+    Generate a generic semantic representation of user data.
+
+  Uses a solid boilerplate added with user insights to create a semantic representation of the user.
+*/
+
+
 function generateSemanticRepresentation(userData) {
   return userData.map(user => {
     const name = user.name;
