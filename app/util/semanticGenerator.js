@@ -5,9 +5,11 @@
   Uses a solid boilerplate added with user insights to create a semantic representation of the user.
 */
 
+import getEmbeddings from "../functions/getEmbeddings.js";
 
-function generateSemanticRepresentation(userData) {
-  return userData.map(user => {
+
+async function generateSemanticRepresentation(userData, pc) {
+  return Promise.all(userData.map(async user => {
     const name = user.name;
     const age = user.personal?.age ?? "unknown";
     const gender = user.personal?.gender ?? "unspecified";
@@ -21,8 +23,20 @@ function generateSemanticRepresentation(userData) {
     const likes = user.behavioural?.previousLikes?.join(", ") ?? "no data";
     const dislikes = user.behavioural?.previousDislikes?.join(", ") ?? "no data";
 
-    return `I am ${name}, a ${age}-year-old ${gender} studying ${degree} at ${university}, graduating in ${gradYear}. I live in ${city}, and I prefer areas like ${areas}. My interests include ${interests}. Here's a bit about me: "${bio}". Based on my past interactions, I tend to like ${likes}, and I typically dislike ${dislikes}.`;
-  });
+    const chunk_text = `I am ${name}, a ${age}-year-old ${gender} studying ${degree} at ${university}, graduating in ${gradYear}. I live in ${city}, and I prefer areas like ${areas}. My interests include ${interests}. Here's a bit about me: "${bio}". Based on my past interactions, I tend to like ${likes}, and I typically dislike ${dislikes}.`;
+
+    const embeddings = await getEmbeddings(chunk_text, pc);
+
+    await Promise.resolve(setTimeout(() => {
+      console.log(`Generated semantic representation for ${name}`);
+    }, 1000));
+
+    return JSON.stringify({
+      ...user,
+      chunkText: chunk_text,
+      embeddings: embeddings.data[0].values,
+    });
+  }));
 }
 
 

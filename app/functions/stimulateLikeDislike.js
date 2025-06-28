@@ -1,7 +1,7 @@
 import userData from "../sample/user.data.js";
 import generateSemanticRepresentation from "../util/semanticGenerator.js";
 
-const stimulateLikeDislike = async (userId, accountId, action) => {
+const stimulateLikeDislike = async (userId, accountId, action, pc) => {
     /* 
         Action is an object that contains the action type (like or dislike) and any additional data needed.
 
@@ -38,21 +38,21 @@ const stimulateLikeDislike = async (userId, accountId, action) => {
         if (action.type === 'like') {
             user.behavioural.previousLikes = [...(user.behavioural.previousLikes || []), ...action.data.tags];
             user.personal.interests = [...(user.personal.interests || []), ...action.data.tags];
-            console.log(`User ${userId} liked content with tags: ${action.data.tags}`);
         } else if (action.type === 'dislike') {
             user.behavioural.previousLikes = (user.behavioural.previousLikes || []).filter(tag => !action.data.tags.includes(tag));
             user.behavioural.previousDislikes = [...(user.behavioural.previousDislikes || []), ...action.data.tags];
             user.personal.interests = (user.personal.interests || []).filter(tag => !action.data.tags.includes(tag));
-            console.log(`User ${userId} disliked content with tags: ${action.data.tags}`);
         } else {
             throw new Error("Invalid action type");
         }
 
-        const generateSemantics = generateSemanticRepresentation([user]);
+        const generateSemantics = await generateSemanticRepresentation([user], pc);
+        const parsedData = JSON.parse(generateSemantics);
 
         return {
             id: user.id,
-            chunk_text: generateSemantics[0],
+            chunkText: parsedData.chunkText,
+            embeddings: parsedData.embeddings,
         }
 
     } catch (error) {

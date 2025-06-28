@@ -26,34 +26,27 @@ import generateSemanticRepresentation from "../util/semanticGenerator.js";
         - This can be done by creating separate namespaces for different regions or countries.
 */
 
-const recommender = async (pc, indexName, indexHost, namespace, userId) => {
-    try {
-        const user = findUserById(userId);
-        if (!user) throw new Error("User not found");
+const recommender = async (ns, userId, topK = 5) => {
+  const user = findUserById(userId);
+  if (!user?.embeddings) {
+    console.error("User not found or missing embeddings");
+    return [];
+  }
 
-        const generatedText = generateSemanticRepresentation([user]).join("");
+  try {
+    const results = await ns.query({
+      vector: user.embeddings,
+      topK,
+      includeMetadata: false,
+      includeValues: false,
+    });
 
-        const ns = pc.index(indexName, indexHost).namespace(namespace);
-
-        const query = {
-            inputs: { text: generatedText },
-            topK: 5,
-        };
-
-        const results = await ns.searchRecords({ query });
-
-        const chunks = results.result.hits
-        const users = chunks.map(hit => hit._id)
-
-        if (users.length === 0) {
-            console.log("No recommendations found.");
-        } 
-        return users.map(userId => findUserById(userId));
-
-    } catch (error) {
-        console.error("Error in recommender:", error);
-    }
-}
+    return results.matches?.map((match) => match.id) ?? [];
+  } catch (err) {
+    console.error(`Recommender query failed for user ${userId}:`, err.message);
+    return [];
+  }
+};
 
 
 const findUserById = (userId) => {

@@ -1,5 +1,3 @@
-import getEmbeddings from "./getEmbeddings.js";
-
 /*
     Purpose:
       Update the embeddings for a user in the Pinecone index.
@@ -19,24 +17,17 @@ import getEmbeddings from "./getEmbeddings.js";
     It also updates the metadata associated with the user in the index.
 */
 
-const updateEmbeddings = async (pc, indexName, indexHost, namespace, userData) => {
+const updateEmbeddings = async (ns, userData) => {
     try {
-        const embeddings = await getEmbeddings(userData.chunk_text, pc);
-        userData.embeddings = embeddings.data[0].values;
-
-        const index = pc.index(indexName, indexHost);
-        const ns = index.namespace(namespace);
         await ns.update({
             id: String(userData.id), 
             values: userData.embeddings,
             metadata: {
-                chunk_text: userData.chunk_text,
+                chunk_text: userData.chunkText,
                 category: userData.category || "general", 
                 quarter: userData.quarter || "Q1"          
             }
         });
-
-        console.log(`Successfully updated embeddings for user ID: ${userData.id} in index '${indexName}' in namespace '${namespace}'.`);
     } catch (error) {
         console.error("Error generating embeddings:", error);
         throw error;

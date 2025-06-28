@@ -3,6 +3,10 @@ import { Pinecone } from '@pinecone-database/pinecone';
 import recommender from './functions/search.js';
 import stimulateLikeDislike from './functions/stimulateLikeDislike.js';
 import updateEmbeddings from './functions/updateOne.js';
+import generateSemanticRepresentation from './util/semanticGenerator.js';
+import userData from './sample/user.data.js';
+import fs from 'fs';
+import path from 'path';
 
 dotenv.config();
 
@@ -33,6 +37,25 @@ if(!indexExists) {
 }
 console.log(`Index ${indexName} created successfully.`);
 
+const ns = pc.index(indexName, indexHost).namespace(namespace);
+
+
+// (async (userData, pc) => {
+//   try {
+//     const semantics = await generateSemanticRepresentation(userData, pc);
+//     const parsedData = semantics.map(obj => JSON.parse(obj));
+
+//     const output = `const enrichedUserData = ${JSON.stringify(parsedData, null, 2)};\n\nexport default enrichedUserData;\n`;
+
+//     const filePath = path.resolve('./app/sample/sampleData2.js');
+//     fs.writeFileSync(filePath, output, 'utf-8');
+
+//     console.log(`Semantic user data written to ${filePath}`);
+//   } catch (error) {
+//     console.error("Error generating and writing semantic user data:", error);
+//   }
+// })(userData, pc);
+
 // Uncomment the following line to populate the vectorDB with initial user base
 // upsertAll(pc, indexName, indexHost, namespace);
 
@@ -43,7 +66,7 @@ console.log(`Index ${indexName} created successfully.`);
   2. accountId: ID of the account associated with the action
   3. action: an object containing the type of action (like or dislike) and any additional data needed
 */
-const updatedUserData = await stimulateLikeDislike("5", "4", { type: 'like', data: { tags: ["hiking", "mountain-person"] } })
+const updatedUserData = await stimulateLikeDislike("5", "4", { type: 'like', data: { tags: ["hiking", "mountain-person"] } }, pc)
 console.log("Updated user data: ", updatedUserData)
 
 /*
@@ -55,7 +78,7 @@ console.log("Updated user data: ", updatedUserData)
   4. namespace: Namespace in which the user data is stored
   5. updatedUserData: The user data object containing the updated chunk_text and other metadata
 */
-await updateEmbeddings(pc, indexName, indexHost, namespace, updatedUserData);
+await updateEmbeddings(ns, updatedUserData);
 console.log("Updated embeddings for user ID: ", updatedUserData.id);
 
 /*
@@ -67,5 +90,5 @@ console.log("Updated embeddings for user ID: ", updatedUserData.id);
   4. namespace: Namespace in which the user data is stored
   5. userId: ID of the user for whom recommendations are being sought
 */
-const users = await recommender(pc, indexName, indexHost, namespace, '5');
+const users = await recommender(ns, '5', 5);
 console.log("Recommended users: ", users);
