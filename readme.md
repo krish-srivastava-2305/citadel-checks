@@ -17,6 +17,38 @@ A sophisticated, real-time recommendation engine built with vector embeddings, P
 
 The Citadel Recommendation System is an advanced machine learning-powered platform designed to deliver highly personalized content recommendations in real-time. Unlike traditional collaborative filtering approaches, this system leverages the power of semantic vector embeddings to understand the deeper meaning and context of user preferences and content characteristics.
 
+## How to Run Locally
+
+### Prerequisites
+
+- **Node.js** (v18 or higher)
+
+### Quick Setup
+
+1. **Clone the Repository**
+```bash
+git clone https://github.com/krish-srivastava/citadel-checks.git
+cd citadel-checks
+```
+
+2. **Install Dependencies**
+```bash
+npm install
+```
+3. **Set Up Environment Variables**
+   - Create a `.env` file in the root directory
+   - Add your ENVIRONMENT VARIABLES:
+      PINECONE_API_KEY=""
+      PINECONE_INDEX_HOST=""
+      PINECONE_INDEX_NAME=""
+
+3. **Run Algorithm**
+```bash
+node app/index.js
+```
+
+
+
 ### Key Features
 
 - **Semantic Understanding**: Uses advanced NLP models like SBERT to generate meaningful vector representations
