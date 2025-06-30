@@ -15,7 +15,7 @@ A sophisticated, real-time recommendation engine built with vector embeddings, P
 
 ## Introduction
 
-The Citadel Recommendation System is an advanced machine learning-powered platform designed to deliver highly personalized content recommendations in real-time. Unlike traditional collaborative filtering approaches, this system leverages the power of semantic vector embeddings to understand the deeper meaning and context of user preferences and content characteristics.
+The Citadel Recommendation System is an advanced machine learning-powered platform designed to deliver highly personalized recommendations in real-time. Unlike traditional collaborative filtering approaches, this system leverages the power of semantic vector embeddings to understand the deeper meaning and context of user preferences and content characteristics.
 
 ## How to Run Locally
 
@@ -62,7 +62,7 @@ node app/index.js
 The system consists of three main architectural components:
 
 1. **Data Processing Pipeline**: Converts user data and content into semantic vector embeddings
-2. **Real-time Recommendation Engine**: Processes user requests and generates personalized recommendations
+2. **Real-time Recommendation Engine**: Processes user requests and generates recommendations
 3. **Event-Driven Update System**: Maintains system state and updates recommendations based on user interactions
 
 ## Core Logic
@@ -242,16 +242,7 @@ The Citadel Recommendation System represents a modern approach to personalized c
 
 **Operational Benefits:**
 - Minimal maintenance overhead with managed vector database
-- Comprehensive monitoring and alerting capabilities
 - Seamless integration with existing technology stacks
-- Robust error handling and recovery mechanisms
-
-### Future Enhancements
-
-- **Multi-modal Embeddings**: Support for image, audio, and video content
-- **Federated Learning**: Privacy-preserving collaborative filtering
-- **Explainable AI**: Transparent recommendation reasoning
-- **Advanced Personalization**: Dynamic user persona modeling
 
 The system is designed to evolve with your business needs while maintaining the core principles of performance, scalability, and user experience. Whether you're starting with a few thousand users or scaling to millions, Citadel provides the foundation for delivering exceptional personalized experiences.
 
@@ -260,7 +251,5 @@ The system is designed to evolve with your business needs while maintaining the 
 **Repository**: [GitHub - krish-srivastava-2305/citadel-checks](https://github.com/krish-srivastava-2305/citadel-checks)
 
 **Contributors**: Krish Srivastava
-
-**License**: [Specify License]
 
 **Last Updated**: June 2025
