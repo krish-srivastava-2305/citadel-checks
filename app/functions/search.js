@@ -1,5 +1,4 @@
 import userData from "../sample/user.data.js"
-import generateSemanticRepresentation from "../util/semanticGenerator.js";
 
 /* 
     Purpose:
